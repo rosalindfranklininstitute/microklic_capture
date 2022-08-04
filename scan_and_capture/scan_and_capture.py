@@ -40,7 +40,7 @@ def main(fpath):
 
            stage_move.pos(pos_x, pos_y, pos_z)
            sleep(1)
-           camera.take_photo(save=True, fpath=f'{scan_path}/im_x{pos_x}_y{posy}.jpeg')
+           camera.take_photo(save=True, fpath=f'{fpath}/im_x{pos_x}_y{posy}.jpeg')
            sleep(1)
 
     stage_move.pos(start_position[0],start_position[1],start_position[2])
