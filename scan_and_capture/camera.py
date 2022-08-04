@@ -33,19 +33,27 @@ def Camera(Picamera):
 
         # set up camera to take
         camera.resolution = 720, 480
-        camera.capture('preview.png')
-        img = cv2.imread('preview.png')
-        im_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        try:
+            camera.capture('preview.png')
+            img = cv2.imread('preview.png')
+            im_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        except Exception as e:
+            print("Camera failed to capture: e")
 
         # set up figure to display to screen
-        plt.figure(1)
-        plt.imshow(im_rgb)
-        sleep(10)
+        if im_rgb:
+            plt.figure(1)
+            plt.imshow(im_rgb)
+            sleep(10)
 
         #Close plot, delete tmp file and turn off illumination
         plt.close()
         if os.path.isfile('preview.png'):
-            os.remove('preview.png')
+            try:
+                os.remove('preview.png')
+            except Exception as e:
+                print(e)
+                print("Temp file preview.png cannot be removed")
         ledring.turn_off()
 
     @classmethod
