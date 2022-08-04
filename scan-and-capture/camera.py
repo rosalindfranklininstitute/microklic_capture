@@ -68,10 +68,9 @@ class Camera(Picamera):
         plt.close()
 
 
-    def preview():
-        pass
-
-    def start_preview(self, **options):
+    @classmethod
+    def rfi_preview(cls):
+       
         """
         Displays the preview overlay.
 
@@ -104,30 +103,15 @@ class Camera(Picamera):
             suffices to terminate the environment, including the camera and its
             associated preview.
         """
-        self._check_camera_open()
-        self._preview.close()
-        options.setdefault('layer', self._preview_layer)
-        options.setdefault('alpha', self._preview_alpha)
-        options.setdefault('fullscreen', self._preview_fullscreen)
-        options.setdefault('window', self._preview_window)
-        renderer = PiPreviewRenderer(
-            self, self._camera.outputs[self.CAMERA_PREVIEW_PORT], **options)
-        self._preview = renderer
-        return renderer
-
-        #For ctrl+C:
-        button = Button(17)
+    
         camera = PiCamera()
         camera.rotation =180
 
         frame = 1
-
         while True:
             try:
                 camera.start_preview(alpha=150)
-                button.wait_for_press()
-                camera.capture('/home/pi/animation/frame%03d.jpg' % frame)
-                frame += 1
+         
             except KeyboardInterrupt:
                 camera.stop_preview()
                 camera.close()
@@ -135,11 +119,10 @@ class Camera(Picamera):
 
     def close_and_flush():
        # https://forums.raspberrypi.com/viewtopic.php?t=152239
-        camera = picamera.PiCamera()
+        camera = PiCamera()
         camera.stop_preview() #review later
-        print('control-d')
+     )
         pass
-
 
 if __name__=='__main__':
     camera = Camera()
