@@ -7,6 +7,7 @@ import cv2
 import board
 import neopixel
 import sys
+import argparse
 
 class LEDRing:
     def __init__(self):
@@ -24,7 +25,8 @@ class LEDRing:
 
 def Camera(Picamera):
     @classmethod
-    def take_photo(cls, save=False, fpath="."):
+
+    def snapshot(cls):
         # turn on illumination
         ledring= LEDRing()
         ledring.turn_on()
@@ -46,6 +48,25 @@ def Camera(Picamera):
             os.remove('preview.png')
         ledring.turn_off()
 
+    @classmethod
+    def take_photo(cls, save=True, fpath='preview.png'):
+        # turn on illumination
+        ledring = LEDRing()
+        ledring.turn_on()
+
+        # set up camera to take
+        camera.resolution = 720, 480
+        camera.capture(fpath)
+        img = cv2.imread(fpath)
+        im_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        # set up figure to display to screen
+        plt.figure(1)
+        plt.imshow(im_rgb)
+        sleep(10)
+        # Close plot, delete tmp file and turn off illumination
+        plt.close()
+
 
     def preview():
         pass
@@ -56,8 +77,16 @@ def Camera(Picamera):
 
 if __name__=='__main__':
     camera = Camera()
-    if sys.argv[1] == 'take_photo':
+    if sys.argv[1] == 'snapshot':
         camera.take_photo()
+
+    if sys.argv[1] == 'take_photo':
+        parser = argparse.ArgumentParser()
+        parser.add_argument(dest='save', type="bool", help="This is the first argument")
+        parser.add_argument(dest='fpath', type="str", help="This is the first argument")
+        args = parser.parse_args()
+        camera.take_photo(args.save, args.fpath)
+
     if sys.argv[1] == 'preview':
         camera.preview()
 
