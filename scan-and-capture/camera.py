@@ -72,6 +72,9 @@ class Camera(Picamera):
         pass
 
     def close_and_flush():
+       # https://forums.raspberrypi.com/viewtopic.php?t=152239
+        camera = picamera.PiCamera()
+        camera.stop_preview() #review later
         print('control-d')
         pass
 
