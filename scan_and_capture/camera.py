@@ -25,8 +25,27 @@ class LEDRing:
 def Camera(Picamera):
     @classmethod
     def take_photo(cls, save=False, fpath="."):
-        # illuminate Pixels
-        pass
+        # turn on illumination
+        ledring= LEDRing()
+        ledring.turn_on()
+
+        # set up camera to take
+        camera.resolution = 720, 480
+        camera.capture('preview.png')
+        img = cv2.imread('preview.png')
+        im_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        # set up figure to display to screen
+        plt.figure(1)
+        plt.imshow(im_rgb)
+        sleep(10)
+
+        #Close plot, delete tmp file and turn off illumination
+        plt.close()
+        if os.path.isfile('preview.png'):
+            os.remove('preview.png')
+        ledring.turn_off()
+
 
     def preview():
         pass
