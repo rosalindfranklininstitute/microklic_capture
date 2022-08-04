@@ -74,6 +74,7 @@ def Camera(Picamera):
         plt.close()
 
 
+
     def preview():
         pass
 
