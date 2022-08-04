@@ -1,9 +1,7 @@
 from time import sleep
 from picamera import PiCamera
 import matplotlib.pyplot as plt
-import numpy as np
 import os
-import cv2
 import board
 import neopixel
 import sys
