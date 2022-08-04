@@ -1,9 +1,7 @@
 from time import sleep
 from picamera import PiCamera
 import matplotlib.pyplot as plt
-import numpy as np
 import os
-import cv2
 import board
 import neopixel
 import sys
@@ -23,7 +21,7 @@ class LEDRing:
         self.pixels.fill((r, g, b))
 
 
-class Camera(Picamera):
+def Camera(Picamera):
     @classmethod
 
     def snapshot(cls):
@@ -33,19 +31,27 @@ class Camera(Picamera):
 
         # set up camera to take
         camera.resolution = 720, 480
-        camera.capture('preview.png')
-        img = cv2.imread('preview.png')
-        im_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        try:
+            camera.capture('preview.png')
+            img = cv2.imread('preview.png')
+            im_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        except Exception as e:
+            print("Camera failed to capture: e")
 
         # set up figure to display to screen
-        plt.figure(1)
-        plt.imshow(im_rgb)
-        sleep(10)
+        if im_rgb:
+            plt.figure(1)
+            plt.imshow(im_rgb)
+            sleep(10)
 
         #Close plot, delete tmp file and turn off illumination
         plt.close()
         if os.path.isfile('preview.png'):
-            os.remove('preview.png')
+            try:
+                os.remove('preview.png')
+            except Exception as e:
+                print(e)
+                print("Temp file preview.png cannot be removed")
         ledring.turn_off()
 
     @classmethod
@@ -67,10 +73,9 @@ class Camera(Picamera):
         # Close plot, delete tmp file and turn off illumination
         plt.close()
 
-
     @classmethod
     def rfi_preview(cls):
-       
+
         """
         Displays the preview overlay.
 
@@ -103,31 +108,31 @@ class Camera(Picamera):
             suffices to terminate the environment, including the camera and its
             associated preview.
         """
-    
+
         camera = PiCamera()
-        camera.rotation =180
+        camera.rotation = 180
 
         frame = 1
         while True:
             try:
                 camera.start_preview(alpha=150)
-         
+
             except KeyboardInterrupt:
                 camera.stop_preview()
                 camera.close()
                 break
 
     def close_and_flush():
-       # https://forums.raspberrypi.com/viewtopic.php?t=152239
+        # https://forums.raspberrypi.com/viewtopic.php?t=152239
         camera = PiCamera()
-        camera.stop_preview() #review later
-     )
-        pass
+        camera.stop_preview()  # review later
+
+
 
 if __name__=='__main__':
     camera = Camera()
     if sys.argv[1] == 'snapshot':
-        camera.take_photo()
+        camera.snapshot()
 
     if sys.argv[1] == 'take_photo':
         parser = argparse.ArgumentParser()
@@ -137,8 +142,7 @@ if __name__=='__main__':
         camera.take_photo(args.save, args.fpath)
 
     if sys.argv[1] == 'preview':
-        camera.preview()
+        camera.rfi_preview()
 
     if sys.argv[1] == 'off':
-        print('try ctrl-D to stop the script, ')
         camera.close_and_flush()
