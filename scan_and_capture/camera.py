@@ -85,7 +85,7 @@ def Camera(Picamera):
 if __name__=='__main__':
     camera = Camera()
     if sys.argv[1] == 'snapshot':
-        camera.take_photo()
+        camera.snapshot()
 
     if sys.argv[1] == 'take_photo':
         parser = argparse.ArgumentParser()
