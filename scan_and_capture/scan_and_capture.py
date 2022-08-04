@@ -8,10 +8,7 @@ import cv2
 import board
 import neopixel
 from camera import Camera, LEDRing
-
-
-
-
+import sys
 
 
 def main(fpath):
@@ -52,4 +49,5 @@ def main(fpath):
 
 
 if __name__ == '__main__':
-    main()
+    # sys.argv[1] path name add
+    main(sys.argv[1])
